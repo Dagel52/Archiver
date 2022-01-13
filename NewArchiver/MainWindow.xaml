@@ -1,0 +1,22 @@
+﻿<Window x:Class="NewArchiver.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NewArchiver"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Button Content="Выбор файла" HorizontalAlignment="Left" Margin="26,41,0,0" VerticalAlignment="Top" Height="26" Width="171" Click="Button_Compress_Path"/>
+        <TextBox Name="Input" HorizontalAlignment="Left" Margin="328,49,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="427"/>
+        <TextBox Name="Output" HorizontalAlignment="Left" Margin="328,79,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="427"/>
+        <Button Content="Архивировать" HorizontalAlignment="Left" Margin="26,113,0,0" VerticalAlignment="Top" Height="45" Width="171" Click="Button_Compress"/>
+        <Button Content="Разархивировать" HorizontalAlignment="Left" Margin="26,163,0,0" VerticalAlignment="Top" Height="54" Width="171" Click="Button_Decompress"/>
+        <ProgressBar Grid.Row="1" Height="20" Width="200" Margin="0,4,0,0" Minimum="0" Maximum="100"  Name="progressBar1" HorizontalAlignment="Center"  VerticalAlignment="Center" Visibility="Hidden" />
+        <TextBlock Name="Percent" Text="{Binding ElementName=progressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+        <TextBlock Name="Heading" HorizontalAlignment="Left" Margin="359,177,0,0" Text="Прогресс:" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Hidden"/>
+        <TextBlock HorizontalAlignment="Left" Margin="216,80,0,0" Text="Выбранный путь :" TextWrapping="Wrap" VerticalAlignment="Top" Width="107"/>
+        <TextBlock HorizontalAlignment="Left" Margin="216,51,0,0" Text="Выбранный файл :" TextWrapping="Wrap" VerticalAlignment="Top" Width="107"/>
+        <Button Content="Выбор пути" HorizontalAlignment="Left" Margin="26,72,0,0" VerticalAlignment="Top" Width="171" Height="25" Click="Button_Folder_Path"/>
+    </Grid>
+</Window>
