@@ -16,7 +16,9 @@ namespace NewArchiver
         public Compressor(string input, string output) : base(input, output)
         {
             inputFile = new FileStream(_inputFile, FileMode.Open);
-            outFile = new FileStream(_inputFile + ".gz", FileMode.Append);
+            var abc =_inputFile.LastIndexOf('\\');
+            var result = _inputFile.Remove(0, abc + 1);
+            outFile = new FileStream($"{_outputFile}\\{result}.gz", FileMode.Append);
         }
 
         private FileStream inputFile;

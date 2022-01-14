@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Выбор файла" HorizontalAlignment="Left" Margin="26,41,0,0" VerticalAlignment="Top" Height="26" Width="171" Click="Button_Compress_Path"/>
+        <Button Content="Выбор файла" HorizontalAlignment="Left" Margin="26,41,0,0" VerticalAlignment="Top" Height="26" Width="171" Click="Button_File_Path"/>
         <TextBox Name="Input" HorizontalAlignment="Left" Margin="328,49,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="427"/>
         <TextBox Name="Output" HorizontalAlignment="Left" Margin="328,79,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="427"/>
         <Button Content="Архивировать" HorizontalAlignment="Left" Margin="26,113,0,0" VerticalAlignment="Top" Height="45" Width="171" Click="Button_Compress"/>

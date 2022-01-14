@@ -31,13 +31,13 @@ namespace NewArchiver
             InitializeComponent();
         }
 
-        private void Button_Compress_Path(object sender, RoutedEventArgs e)
+        private void Button_File_Path(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (openFileDialog.ShowDialog() == true)
             {
-                Input.Text = Path.GetFullPath(openFileDialog.FileName);
+                Input.Text = Path.GetFullPath(openFileDialog?.FileName);
                 _input = Input.Text;
                 Output.Text = _output ?? Path.GetDirectoryName(_input);
             }
@@ -56,7 +56,7 @@ namespace NewArchiver
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
             CommonFileDialogResult result = dialog.ShowDialog();
-            Output.Text = _output = dialog.FileName;
+            Output.Text = _output = dialog?.FileName;
         }
 
         private void Button_Compress(object sender, RoutedEventArgs e)

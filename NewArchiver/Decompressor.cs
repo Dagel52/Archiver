@@ -15,7 +15,10 @@ namespace NewArchiver
         public Decompressor(string input, string output) : base(input, output)
         {
             inputFile = new FileStream(_inputFile, FileMode.Open);
-            outFile = new FileStream(_inputFile.Remove(_inputFile.Length - 3), FileMode.Append);
+            var abc = _inputFile.LastIndexOf('\\');
+            var result = _inputFile.Remove(0, abc + 1);
+            result = result.Remove(result.Length - 3, 3);
+            outFile = new FileStream($"{_outputFile}\\{result}", FileMode.Append);
         }
 
         private Task[] _taskPool;
