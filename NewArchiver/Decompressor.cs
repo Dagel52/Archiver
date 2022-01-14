@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,10 +15,10 @@ namespace NewArchiver
             try
             {
                 inputFile = new FileStream(_inputFile, FileMode.Open);
-                var abc = _inputFile.LastIndexOf('\\');
-                var result = _inputFile.Remove(0, abc + 1);
-                result = result.Remove(result.Length - 3, 3);
-                outFile = new FileStream(Path.Combine(_outputFile, result), FileMode.Append);
+                var fileNamePosition = _inputFile.LastIndexOf('\\');
+                var fileName = _inputFile.Remove(0, fileNamePosition + 1);
+                fileName = fileName.Remove(fileName.Length - 3, 3);
+                outFile = new FileStream(Path.Combine(_outputFile, fileName), FileMode.Append);
             }
             catch (Exception ex)
             {
@@ -29,10 +27,10 @@ namespace NewArchiver
         }
 
         private Task[] _taskPool;
-        private Thread _RW = Thread.CurrentThread;
-        private FileStream inputFile;
-        private FileStream outFile;
-        private byte[] buffer = new byte[8];
+        private readonly Thread _RW = Thread.CurrentThread;
+        private readonly FileStream inputFile;
+        private readonly FileStream outFile;
+        private readonly byte[] buffer = new byte[8];
         private int _dataPortionSize;
         private int compressedBlockLength;
         ProgressBar _progress;
@@ -46,7 +44,7 @@ namespace NewArchiver
 
         public void Decompress()
         {
-            _progress._overallSize = inputFile.Length;
+            _progress.OverallSize = inputFile.Length;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             try

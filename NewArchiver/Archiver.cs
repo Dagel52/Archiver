@@ -13,12 +13,13 @@ namespace NewArchiver
         protected static byte[][] _compressedDataBlock = new byte[_threadNumber][];
         protected static int _dataBlockSize = 10485760;
         protected static string _inputFile, _outputFile;
+
         protected Archiver()
         {
 
         }
 
-        public Archiver(string input, string output)
+        internal Archiver(string input, string output)
         {
             _inputFile = input;
             _outputFile = output;

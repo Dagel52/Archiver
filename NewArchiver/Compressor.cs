@@ -1,32 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
+
 
 namespace NewArchiver
 {
-    internal class Compressor : Archiver
+    internal sealed class Compressor : Archiver
     {
         public Compressor(string input, string output) : base(input, output)
         {
            inputFile = new FileStream(_inputFile, FileMode.Open);
-           var abc = _inputFile.LastIndexOf('\\');
-           var result = _inputFile.Remove(0, abc + 1);
-           outFile = new FileStream(Path.Combine(_outputFile, result + ".gz"), FileMode.Append);
+           var fileNamePosition = _inputFile.LastIndexOf('\\');
+           var fileName = _inputFile.Remove(0, fileNamePosition + 1);
+           outFile = new FileStream(Path.Combine(_outputFile, fileName + ".gz"), FileMode.Append);
         }
 
-        private FileStream inputFile;
-        private FileStream outFile;
-        private Thread _RW = Thread.CurrentThread;
+        private readonly FileStream inputFile;
+        private readonly FileStream outFile;
+        private readonly Thread _RW = Thread.CurrentThread;
         private Task[] _taskPool;
         private int _standartBlockSize = 10485760;
-        ProgressBar _progress;
+        private ProgressBar _progress;
 
         public override void Launch(ProgressBar progress)
         {
@@ -38,7 +36,7 @@ namespace NewArchiver
 
         private void Compress()
         {
-            _progress._overallSize = inputFile.Length;
+            _progress.OverallSize = inputFile.Length;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             try

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,12 +7,22 @@ namespace NewArchiver
 {
     internal class ProgressBar 
     {
-        System.Windows.Threading.Dispatcher _dispatcher;
-        System.Windows.Controls.ProgressBar _progressBar;
-        TextBlock _percent;
-        TextBlock _heading;
-        internal long _overallSize { get; set; }
+        readonly System.Windows.Threading.Dispatcher _dispatcher;
+        readonly System.Windows.Controls.ProgressBar _progressBar;
+        readonly TextBlock _percent;
+        readonly TextBlock _heading;
+        private long _overallSize;
         private long _currentPosition;
+
+        internal long OverallSize
+        {
+            private get => _overallSize;
+            set
+            {
+                if (_overallSize == 0)
+                    _overallSize = value;
+            }
+        }
 
         public ProgressBar(System.Windows.Threading.Dispatcher dispatcher, System.Windows.Controls.ProgressBar progressBar,
             TextBlock percent, TextBlock heading)
