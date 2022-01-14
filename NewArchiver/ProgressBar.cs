@@ -29,9 +29,9 @@ namespace NewArchiver
         }
 
 
-        public void UpdatePosition(long newPosition)
+        internal void UpdatePosition(long newPosition)
         {
-            if (newPosition < _currentPosition)
+            if (newPosition < _currentPosition || newPosition > _overallSize)
             {
                 throw new InvalidOperationException();
             }

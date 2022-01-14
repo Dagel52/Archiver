@@ -19,9 +19,6 @@ using Path = System.IO.Path;
 
 namespace NewArchiver
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         static Archiver archiver;
@@ -46,24 +43,51 @@ namespace NewArchiver
 
         private void Button_Decompress(object sender, RoutedEventArgs e)
         {
-            archiver = new Decompressor(_input, _output);
-            var progress = new ProgressBar(this.Dispatcher, progressBar1, Percent, Heading);
-            archiver.Launch(progress);
+            try
+            {
+                archiver = new Decompressor(_input, _output);
+                var progress = new ProgressBar(this.Dispatcher, progressBar1, Percent, Heading);
+                archiver.Launch(progress);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                progressBar1.Visibility = Visibility.Hidden;
+                Percent.Visibility = Visibility.Hidden;
+                Heading.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Button_Folder_Path(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
-            CommonFileDialogResult result = dialog.ShowDialog();
-            Output.Text = _output = dialog?.FileName;
+            try
+            {
+                var dialog = new CommonOpenFileDialog();
+                dialog.IsFolderPicker = true;
+                CommonFileDialogResult result = dialog.ShowDialog();
+                Output.Text = _output = dialog?.FileName;
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         private void Button_Compress(object sender, RoutedEventArgs e)
         {
-            archiver = new Compressor(_input, _output);
-            var progress = new ProgressBar(this.Dispatcher, progressBar1, Percent, Heading);
-            archiver.Launch(progress);
+            try
+            {
+                archiver = new Compressor(_input, _output);
+                var progress = new ProgressBar(this.Dispatcher, progressBar1, Percent, Heading);
+                archiver.Launch(progress);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                progressBar1.Visibility = Visibility.Hidden;
+                Percent.Visibility = Visibility.Hidden;
+                Heading.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

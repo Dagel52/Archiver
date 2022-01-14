@@ -14,11 +14,18 @@ namespace NewArchiver
     {
         public Decompressor(string input, string output) : base(input, output)
         {
-            inputFile = new FileStream(_inputFile, FileMode.Open);
-            var abc = _inputFile.LastIndexOf('\\');
-            var result = _inputFile.Remove(0, abc + 1);
-            result = result.Remove(result.Length - 3, 3);
-            outFile = new FileStream($"{_outputFile}\\{result}", FileMode.Append);
+            try
+            {
+                inputFile = new FileStream(_inputFile, FileMode.Open);
+                var abc = _inputFile.LastIndexOf('\\');
+                var result = _inputFile.Remove(0, abc + 1);
+                result = result.Remove(result.Length - 3, 3);
+                outFile = new FileStream(Path.Combine(_outputFile, result), FileMode.Append);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private Task[] _taskPool;
