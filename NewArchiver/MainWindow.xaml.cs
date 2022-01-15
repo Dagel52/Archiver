@@ -8,9 +8,9 @@ namespace NewArchiver
 {
     public partial class MainWindow : Window
     {
-        static Archiver archiver;
-        string _input, _output;
-        Checker checker = new Checker();
+        private static Archiver _archiver;
+        private string _input, _output;
+        private Checker _checker = new Checker();
         public MainWindow()
         {
             InitializeComponent();
@@ -35,10 +35,10 @@ namespace NewArchiver
         {
             try
             {
-                checker.DecompressCheck(_input, _output);
-                archiver = new Decompressor(_input, _output);
+                _checker.DecompressCheck(_input, _output);
+                _archiver = new Decompressor(_input, _output);
                 ProgressBar progress = new ProgressBar(Dispatcher, progressBar1, Percent, Heading);
-                archiver.Launch(progress);
+                _archiver.Launch(progress);
             }
             catch (Exception ex)
             {
@@ -70,10 +70,10 @@ namespace NewArchiver
         {
             try
             {
-                checker.CompressCheck(_input,_output);
-                archiver = new Compressor(_input, _output);
+                _checker.CompressCheck(_input,_output);
+                _archiver = new Compressor(_input, _output);
                 ProgressBar progress = new ProgressBar(Dispatcher, progressBar1, Percent, Heading);
-                archiver.Launch(progress);
+                _archiver.Launch(progress);
             }
             catch (Exception ex)
             {

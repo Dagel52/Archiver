@@ -7,10 +7,10 @@ namespace NewArchiver
 {
     internal class ProgressBar 
     {
-        readonly System.Windows.Threading.Dispatcher _dispatcher;
-        readonly System.Windows.Controls.ProgressBar _progressBar;
-        readonly TextBlock _percent;
-        readonly TextBlock _heading;
+        private readonly System.Windows.Threading.Dispatcher Dispatcher;
+        private readonly System.Windows.Controls.ProgressBar Progress;
+        private readonly TextBlock Percent;
+        private readonly TextBlock Heading;
         private long _overallSize;
         private long _currentPosition;
 
@@ -27,13 +27,13 @@ namespace NewArchiver
         public ProgressBar(System.Windows.Threading.Dispatcher dispatcher, System.Windows.Controls.ProgressBar progressBar,
             TextBlock percent, TextBlock heading)
         {
-            _dispatcher = dispatcher;
-            _progressBar = progressBar;
-            _percent = percent;
-            _heading = heading;
-            _progressBar.Visibility = Visibility.Visible;
-            _percent.Visibility = Visibility.Visible;
-            _heading.Visibility = Visibility.Visible;
+            Dispatcher = dispatcher;
+            Progress = progressBar;
+            Percent = percent;
+            Heading = heading;
+            Progress.Visibility = Visibility.Visible;
+            Percent.Visibility = Visibility.Visible;
+            Heading.Visibility = Visibility.Visible;
         }
 
 
@@ -53,18 +53,18 @@ namespace NewArchiver
         private void UpdateProgress(long newPositon)
         {
             var value = 100 * newPositon / _overallSize;
-            _dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
-                _progressBar.Value = value;
+                Progress.Value = value;
             });
 
             if (value >= 100)
             {
-                _dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
-                    _progressBar.Visibility = Visibility.Hidden;
-                    _percent.Visibility = Visibility.Hidden;
-                    _heading.Visibility = Visibility.Hidden;
+                    Progress.Visibility = Visibility.Hidden;
+                    Percent.Visibility = Visibility.Hidden;
+                    Heading.Visibility = Visibility.Hidden;
                 });
             }
             

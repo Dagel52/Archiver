@@ -14,11 +14,11 @@ namespace NewArchiver
         {
             try
             {
-                inputFile = new FileStream(_inputFile, FileMode.Open);
+                InputFile = new FileStream(_inputFile, FileMode.Open);
                 var fileNamePosition = _inputFile.LastIndexOf('\\');
                 var fileName = _inputFile.Remove(0, fileNamePosition + 1);
                 fileName = fileName.Remove(fileName.Length - 3, 3);
-                outFile = new FileStream(Path.Combine(_outputFile, fileName), FileMode.Append);
+                OutputFile = new FileStream(Path.Combine(_outputFile, fileName), FileMode.Append);
             }
             catch (Exception ex)
             {
@@ -27,13 +27,13 @@ namespace NewArchiver
         }
 
         private Task[] _taskPool;
-        private readonly Thread _RW = Thread.CurrentThread;
-        private readonly FileStream inputFile;
-        private readonly FileStream outFile;
-        private readonly byte[] buffer = new byte[8];
+        private readonly Thread RW = Thread.CurrentThread;
+        private readonly FileStream InputFile;
+        private readonly FileStream OutputFile;
+        private readonly byte[] Buffer = new byte[8];
         private int _dataPortionSize;
-        private int compressedBlockLength;
-        ProgressBar _progress;
+        private int _compressedBlockLength;
+        private ProgressBar _progress;
         public override void Launch(ProgressBar progress)
         {
             _progress = progress;
@@ -44,19 +44,19 @@ namespace NewArchiver
 
         public void Decompress()
         {
-            _progress.OverallSize = inputFile.Length;
+            _progress.OverallSize = InputFile.Length;
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             try
             {
-                while (inputFile.Position < inputFile.Length)
+                while (InputFile.Position < InputFile.Length)
                 {
                     ReadAndTasksRun();
                     WriteToFile();
                 }
 
-                outFile.Close();
-                inputFile.Close();
+                OutputFile.Close();
+                InputFile.Close();
 
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
@@ -91,33 +91,33 @@ namespace NewArchiver
 
         protected override void ReadAndTasksRun()
         {
-            _RW.Priority = ThreadPriority.Normal;
+            RW.Priority = ThreadPriority.Normal;
             _taskPool = new Task[_threadNumber];
             for (int taskNumber = 0;
-                 (taskNumber < _threadNumber) && (inputFile.Position < inputFile.Length);
+                 (taskNumber < _threadNumber) && (InputFile.Position < InputFile.Length);
                  taskNumber++)
             {
-                inputFile.Read(buffer, 0, buffer.Length);
-                compressedBlockLength = BitConverter.ToInt32(buffer, 4);
-                _compressedDataBlock[taskNumber] = new byte[compressedBlockLength];
-                buffer.CopyTo(_compressedDataBlock[taskNumber], 0);
+                InputFile.Read(Buffer, 0, Buffer.Length);
+                _compressedBlockLength = BitConverter.ToInt32(Buffer, 4);
+                _compressedDataBlock[taskNumber] = new byte[_compressedBlockLength];
+                Buffer.CopyTo(_compressedDataBlock[taskNumber], 0);
 
-                inputFile.Read(_compressedDataBlock[taskNumber], 8, compressedBlockLength - 8);
-                _dataPortionSize = BitConverter.ToInt32(_compressedDataBlock[taskNumber], compressedBlockLength - 4);
+                InputFile.Read(_compressedDataBlock[taskNumber], 8, _compressedBlockLength - 8);
+                _dataPortionSize = BitConverter.ToInt32(_compressedDataBlock[taskNumber], _compressedBlockLength - 4);
                 _dataBlock[taskNumber] = new byte[_dataPortionSize];
                 DecompressTaskRun(taskNumber);
-                _progress.UpdatePosition(inputFile.Position);
+                _progress.UpdatePosition(InputFile.Position);
             }
         }
 
         protected override void WriteToFile()
         {
-            _RW.Priority = ThreadPriority.Lowest;
+            RW.Priority = ThreadPriority.Lowest;
             for (int taskNumber = 0; (taskNumber < _threadNumber) && (_taskPool[taskNumber] != null);)
             {
                 if (_taskPool[taskNumber].IsCompleted)
                 {
-                    outFile.Write(_dataBlock[taskNumber], 0, _dataBlock[taskNumber].Length);
+                    OutputFile.Write(_dataBlock[taskNumber], 0, _dataBlock[taskNumber].Length);
                     taskNumber++;
                 }
             }
